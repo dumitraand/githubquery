@@ -1,0 +1,47 @@
+<h1> GitHub Repositories </h1>
+
+<%= form_tag("/", method: "post") do %>
+<%= text_field_tag(:query, params["query"]) %>
+<%= submit_tag('Search') %>
+<% end %>
+
+<br/>
+<br/>
+
+<b>Page:</b> <%= @page %>
+
+<% if !@repos.blank? %>
+<table>
+    <thead>
+        <th> Name </th>
+        <th> URL </th>
+        <th> Description </th>
+        <th> Owner </th>
+    </thead>
+    <tbody>
+<% @repos.each do |repo| %>
+        <tr>
+            <td> <%= repo.name %> </td>
+            <td> <a href="<%= repo.url%>"><%= repo.url %></a></td>
+            <td> <%= repo.description %> </td>
+            <td> <a href="<%= repo.owner%>"><%= repo.owner %></a></td>
+        </tr>
+<% end %>
+    </tbody>
+</table>
+<% end %>
+<% if @total_page_count > @page %>
+    <%=form_tag("/", method: "post") do %>
+        <%= hidden_field_tag("query", params["query"])%>
+        <%= hidden_field_tag("page", @page + 1) %>
+        <%= submit_tag("Next Page ->") %>
+    <%end%>
+<% end %>
+
+<% if @page > 1 %>
+    <%=form_tag("/", method: "post") do %>
+        <%= hidden_field_tag("query", params["query"])%>
+        <%= hidden_field_tag("page", @page - 1) %>
+        <%= submit_tag("<- Previous Page") %>
+    <%end%>
+<% end %>
